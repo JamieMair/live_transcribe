@@ -14,7 +14,7 @@ class DisplaySpeechApp(App):
 
     def build(self):
         self.whisper_mic = WhisperMic(
-            model="base",
+            model="medium",
             english=True,
             verbose=False,
             energy=280,
@@ -55,9 +55,9 @@ class DisplaySpeechApp(App):
                 new_text = self.label.text + "\n" + result
                 self.num_lines += 1
                 if self.num_lines > max_lines:
-                    to_remove = max_lines - self.num_lines
-                    new_text = "\n".join(new_text.split("\n")[to_remove:])
-                    self.num_lines -= to_remove
+                    remaining_sentences = new_text.split("\n")[-max_lines:]
+                    new_text = "\n".join(remaining_sentences)
+                    self.num_lines = len(remaining_sentences)
 
                 self.label.text = new_text
         except Exception:
