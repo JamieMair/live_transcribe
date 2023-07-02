@@ -9,12 +9,12 @@ import threading
 class DisplaySpeechApp(App):
     label = None
     whisper_mic = None
-    num_lines = 0
+    num_lines = 1
     is_first = True
 
     def build(self):
         self.whisper_mic = WhisperMic(
-            model="medium",
+            model="base",
             english=True,
             verbose=False,
             energy=280,
