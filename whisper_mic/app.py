@@ -16,7 +16,7 @@ class DisplaySpeechApp(App):
             english=True,
             verbose=False,
             energy=300,
-            pause=0.75,
+            pause=0.4,
             dynamic_energy=False,
             save_file=False,
             device=("cuda" if torch.cuda.is_available() else "cpu"),
@@ -37,13 +37,14 @@ class DisplaySpeechApp(App):
                 self.label, self.label.texture_size[1]
             ),
         )
-        Clock.schedule_interval(self.update_from_mic, 0.1)
+        Clock.schedule_interval(self.update_from_mic, 0.2)
         return self.label
 
     def update_from_mic(self, dt):
         try:
             result = self.whisper_mic.result_queue.get_nowait()
-            self.label.text = str(result)
+            if str(result).strip() != "":
+                self.label.text = str(result)
         except Exception:
             pass
 

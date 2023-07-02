@@ -20,12 +20,18 @@ class WhisperMic:
         verbose=False,
         energy=300,
         pause=0.8,
+        non_speaking_duration=None,
         dynamic_energy=False,
         save_file=False,
     ):
         if device != "cuda":
             print("CUDA not available. Running on CPU")
 
+        self.non_speaking_duration = (
+            non_speaking_duration
+            if non_speaking_duration is not None
+            else min(pause * 0.8, 0.2)
+        )
         self.energy = energy
         self.pause = pause
         self.dynamic_energy = dynamic_energy
@@ -52,6 +58,7 @@ class WhisperMic:
         r = sr.Recognizer()
         r.energy_threshold = self.energy
         r.pause_threshold = self.pause
+        r.non_speaking_duration = self.non_speaking_duration
         r.dynamic_energy_threshold = self.dynamic_energy
 
         with sr.Microphone(sample_rate=16000) as source:
