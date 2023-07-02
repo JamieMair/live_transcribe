@@ -2,18 +2,18 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.label import Label
 import torch
-from whisper_mic.whisper_mic import WhisperMic
+from live_transcribe.live_transcribe import LiveTranscribe
 import threading
 
 
 class DisplaySpeechApp(App):
     label = None
-    whisper_mic = None
+    live_transcribe = None
     num_lines = 1
     is_first = True
 
     def build(self):
-        self.whisper_mic = WhisperMic(
+        self.live_transcribe = LiveTranscribe(
             model="base",
             english=True,
             verbose=False,
@@ -23,7 +23,7 @@ class DisplaySpeechApp(App):
             save_file=False,
             device=("cuda" if torch.cuda.is_available() else "cpu"),
         )
-        threading.Thread(target=self.whisper_mic.transcribe_forever).start()
+        threading.Thread(target=self.live_transcribe.transcribe_forever).start()
         self.label = Label(
             text=str("..."),
             font_size=70,
@@ -45,7 +45,7 @@ class DisplaySpeechApp(App):
     def update_from_mic(self, dt):
         max_lines = 6
         try:
-            result = self.whisper_mic.result_queue.get_nowait()
+            result = self.live_transcribe.result_queue.get_nowait()
             result = str(result)
             if result.strip() != "":
                 if self.is_first:

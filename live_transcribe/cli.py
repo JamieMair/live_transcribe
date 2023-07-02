@@ -10,7 +10,7 @@ import click
 import torch
 import numpy as np
 
-from whisper_mic.whisper_mic import WhisperMic
+from live_transcribe.live_transcribe import LiveTranscribe
 
 
 @click.command()
@@ -56,7 +56,7 @@ from whisper_mic.whisper_mic import WhisperMic
 def main(
     model, english, verbose, energy, pause, dynamic_energy, save_file, device, loop
 ):
-    mic = WhisperMic(
+    mic = LiveTranscribe(
         model=model,
         english=english,
         verbose=verbose,

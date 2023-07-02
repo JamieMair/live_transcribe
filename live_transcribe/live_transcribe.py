@@ -11,7 +11,7 @@ import tempfile
 import sys
 
 
-class WhisperMic:
+class LiveTranscribe:
     def __init__(
         self,
         model="base",
