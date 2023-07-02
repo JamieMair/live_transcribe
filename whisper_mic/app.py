@@ -17,7 +17,7 @@ class DisplaySpeechApp(App):
             model="base",
             english=True,
             verbose=False,
-            energy=300,
+            energy=280,
             pause=0.4,
             dynamic_energy=False,
             save_file=False,
