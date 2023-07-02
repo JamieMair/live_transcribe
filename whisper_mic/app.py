@@ -9,6 +9,8 @@ import threading
 class DisplaySpeechApp(App):
     label = None
     whisper_mic = None
+    num_lines = 0
+    is_first = True
 
     def build(self):
         self.whisper_mic = WhisperMic(
@@ -23,7 +25,7 @@ class DisplaySpeechApp(App):
         )
         threading.Thread(target=self.whisper_mic.transcribe_forever).start()
         self.label = Label(
-            text=str("Say Something!"),
+            text=str("..."),
             font_size=70,
             size_hint=(1, None),
             halign="center",
@@ -37,14 +39,27 @@ class DisplaySpeechApp(App):
                 self.label, self.label.texture_size[1]
             ),
         )
-        Clock.schedule_interval(self.update_from_mic, 0.2)
+        Clock.schedule_interval(self.update_from_mic, 1.0 / 60)
         return self.label
 
     def update_from_mic(self, dt):
+        max_lines = 6
         try:
             result = self.whisper_mic.result_queue.get_nowait()
-            if str(result).strip() != "":
-                self.label.text = str(result)
+            result = str(result)
+            if result.strip() != "":
+                if self.is_first:
+                    self.label.text = result
+                    self.is_first = False
+                    return
+                new_text = self.label.text + "\n" + result
+                self.num_lines += 1
+                if self.num_lines > max_lines:
+                    to_remove = max_lines - self.num_lines
+                    new_text = "\n".join(new_text.split("\n")[to_remove:])
+                    self.num_lines -= to_remove
+
+                self.label.text = new_text
         except Exception:
             pass
 
