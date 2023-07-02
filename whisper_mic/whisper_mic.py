@@ -8,6 +8,7 @@ import numpy as np
 from pydub import AudioSegment
 import os
 import tempfile
+import sys
 
 
 class WhisperMic:
@@ -22,6 +23,9 @@ class WhisperMic:
         dynamic_energy=False,
         save_file=False,
     ):
+        if device != "cuda":
+            print("CUDA not available. Running on CPU")
+
         self.energy = energy
         self.pause = pause
         self.dynamic_energy = dynamic_energy
@@ -105,7 +109,10 @@ class WhisperMic:
     def listen_loop(self):
         threading.Thread(target=self.transcribe_forever).start()
         while True:
-            print(self.result_queue.get())
+            try:
+                print(self.result_queue.get())
+            except KeyboardInterrupt:
+                sys.exit(0)
 
     def listen(self):
         audio_data = self.audio_queue.get()
