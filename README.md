@@ -5,7 +5,7 @@ This repo is based on the work done [here](https://github.com/openai/whisper) by
 
 This library runs a GUI app that should display what is said into the microphone. At the moment it is only a rough prototype, but may be of use to people who have trouble hearing, but are able to read the text.
 
-[!Screenshot of App](screenshots/example.png)
+![Screenshot of App](screenshots/example.png)
 
 ## Setup
 
