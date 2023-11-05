@@ -33,3 +33,10 @@ python -m live_transcribe.app
 The app is very hard to quit, but you can just kill the terminal that you launched it from. 
 
 Hopefully this will be fixed in the future.
+
+### Installation Troubleshooting
+
+To install correctly on Linux, I had to install a package with the following command
+```bash
+sudo apt-get install portaudio19-dev
+```
